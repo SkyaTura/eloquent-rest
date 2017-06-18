@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 
 trait DefaultActionsTrait
 {
-    use ResponseTrait;
+    use ResponseTrait, FilterTrait;
     /**
      * Display a listing of the resource.
      *
@@ -15,8 +15,8 @@ trait DefaultActionsTrait
     public function index(Request $request)
     {
         $obj = $this->model();
-        //$filtered = $this->filter($obj, $request);
-        return $this->response($obj->get());
+        $filtered = $this->filter($obj, $request);
+        return $this->response($filtered->get());
     }
 
     /**
@@ -25,14 +25,11 @@ trait DefaultActionsTrait
      * @param  Request $request
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request, ...$params)
+    public function show(Request $request)
     {
-        $resId = $this->ref;
-
         $obj = $this->model();
-        //$filtered = $this->filter($obj, $request);
-        //$filtered = $this->filter($obj->where('id', '=', $resId), $request);
-        return $this->response($obj);
+        $filtered = $this->filter($obj, $request);
+        return $this->response($filtered->get());
     }
 
     /**

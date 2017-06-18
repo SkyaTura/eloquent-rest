@@ -99,9 +99,9 @@ trait ResourceTrait
 
         switch ($ref){
             case 'first':
-                return (is_string($model))?$model::first() : $model->first();
+                return (is_string($model))?$model::query()->limit(1) : $model->limit(1);
             case 'last':
-                return (is_string($model))?$model::latest()->first() : $model->get()->last();
+                return (is_string($model))?$model::query()->latest()->limit(1) : $model->latest()->limit(1);
             default:
                 return (is_string($model))?$model::find($ref) : $model->find($ref);
         }
@@ -124,6 +124,6 @@ trait ResourceTrait
                 $obj = $this->findOrCreate($obj->$rel(), $id);
         }
 
-        return (empty($relationResource)) ? $obj : $obj->$relationResource;
+        return (empty($relationResource)) ? $obj : $obj->$relationResource();
     }
 }

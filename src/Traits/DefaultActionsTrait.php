@@ -22,7 +22,7 @@ trait DefaultActionsTrait
     /**
      * Display the specified resource.
      *
-     * @param  int $id
+     * @param  Request $request
      * @return \Illuminate\Http\Response
      */
     public function show(Request $request, ...$params)
@@ -30,9 +30,9 @@ trait DefaultActionsTrait
         $resId = $this->ref;
 
         $obj = $this->model();
-        $filtered = $this->filter($obj, $request);
-        $filtered = $this->filter($obj->where('id', '=', $resId), $request);
-        return $this->response($filtered->get());
+        //$filtered = $this->filter($obj, $request);
+        //$filtered = $this->filter($obj->where('id', '=', $resId), $request);
+        return $this->response($obj);
     }
 
     /**

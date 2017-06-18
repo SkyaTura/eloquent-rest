@@ -47,12 +47,13 @@ trait FilterTrait
      * @param array $fields
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function selectFields($obj, $fields)
+    private function selectFields($obj, $fields)
     {
         if (empty($fields)) return $obj;
         $fields = Helper::commaFields($fields);
         $fields = array_merge($fields, $this->persistFields);
         $fields = array_diff($fields, $this->ignoredFields);
+
         return $obj->select($fields);
     }
 
@@ -61,7 +62,7 @@ trait FilterTrait
      * @param $queries
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function where($obj, $queries)
+    private function where($obj, $queries)
     {
         if (empty($queries)) return $obj;
         if (is_string($queries))
@@ -77,7 +78,7 @@ trait FilterTrait
      * @param string $columns
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function orderBy($obj, $columns)
+    private function orderBy($obj, $columns)
     {
         if (empty($columns)) return $obj;
         $columns = Helper::commaFields($columns);
@@ -95,7 +96,7 @@ trait FilterTrait
      * @param string $columns
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function groupBy($obj, $columns)
+    private function groupBy($obj, $columns)
     {
         if (empty($columns)) return $obj;
         $columns = Helper::commaFields($columns);
@@ -109,7 +110,7 @@ trait FilterTrait
      * @param string $query
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function pagination($obj, $query)
+    private function pagination($obj, $query)
     {
         $query = Helper::commaFields($query, [
             "unique" => false,
@@ -125,7 +126,7 @@ trait FilterTrait
      * @param array $custom_clauses
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function filter($obj, $request, $custom_clauses = [])
+    protected function filter($obj, Request $request, $custom_clauses = [])
     {
         $methods = $this->filterMethods;
         $ignore = $this->filterMethods;

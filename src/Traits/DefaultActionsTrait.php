@@ -27,7 +27,7 @@ trait DefaultActionsTrait
      */
     public function show(Request $request, ...$params)
     {
-        $resId = array_splice($params, -1, 1);
+        $resId = $this->ref;
 
         $obj = $this->model();
         $filtered = $this->filter($obj, $request);

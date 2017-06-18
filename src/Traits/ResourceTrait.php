@@ -39,6 +39,7 @@ trait ResourceTrait
      * @var string
      */
     protected $ref;
+    protected $relationResource;
 
     /**
      * @param Request $request
@@ -93,6 +94,19 @@ trait ResourceTrait
         return new $this->defaultModel($params);
     }
 
+    private function findOrCreate($model, $ref){
+        if(empty($ref)) return is_string($model)? new $model : $model;
+
+        switch ($ref){
+            case 'first':
+                return (is_string($model))?$model::first() : $model->first();
+            case 'last':
+                return (is_string($model))?$model::latest()->first() : $model->get()->last();
+            default:
+                return (is_string($model))?$model::find($ref) : $model->find($ref);
+        }
+    }
+
     /**
      * @return \Illuminate\Database\Eloquent\Model
      */
@@ -100,13 +114,16 @@ trait ResourceTrait
     {
         $params = $this->resourcePath;
         $model = $this->defaultModel();
-        //$relationResource = $this->relationResource;
+        $relationResource = $this->relationResource;
+        $ref = $this->ref;
 
-        $obj = (empty($this->thisId)) ? new $model : $model::find($this->thisId);
+        $obj = $this->findOrCreate($model, $ref);
+
         if (!empty($params)) {
             foreach ($params as $rel => $id)
-                $obj = $obj->$rel()->find($id);
+                $obj = $this->findOrCreate($obj->$rel(), $id);
         }
-        return (empty($relationResource)) ? $obj : $obj->$relationResource();
+
+        return (empty($relationResource)) ? $obj : $obj->$relationResource;
     }
 }

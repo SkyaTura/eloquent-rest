@@ -96,14 +96,15 @@ trait ResourceTrait
 
     private function findOrCreate($model, $ref){
         if(empty($ref)) return is_string($model)? new $model : $model;
+        if(is_string($model)) $model = $model::query();
 
         switch ($ref){
             case 'first':
-                return (is_string($model))?$model::query()->limit(1) : $model->limit(1);
+                return $model->take(1);
             case 'last':
-                return (is_string($model))?$model::query()->latest()->limit(1) : $model->latest()->limit(1);
+                return $model->latest()->take(1);
             default:
-                return (is_string($model))?$model::find($ref) : $model->find($ref);
+                return $model->whereKey($ref)->take(1);
         }
     }
 

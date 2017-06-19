@@ -12,7 +12,7 @@ trait ValidationTrait
      *
      * @var array
      */
-    public $rules;
+    public $rules = [];
 
     /**
      * @param string $method

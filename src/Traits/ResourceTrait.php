@@ -122,9 +122,9 @@ trait ResourceTrait
 
         if (!empty($params)) {
             foreach ($params as $rel => $id)
-                $obj = $this->findOrCreate($obj->$rel(), $id);
+                $obj = $this->findOrCreate($obj->get(['*'])->first()->$rel(), $id);
         }
 
-        return (empty($relationResource)) ? $obj : $obj->$relationResource();
+        return (empty($relationResource)) ? $obj : $obj->get(['*'])->first()->$relationResource();
     }
 }

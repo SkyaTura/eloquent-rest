@@ -42,6 +42,7 @@ trait DefaultActionsTrait
     {
         $model = $this->defaultModel($request->all());
         $model->save();
+        return $this->response($model);
     }
 
     /**
@@ -73,5 +74,18 @@ trait DefaultActionsTrait
     public function destroy($id)
     {
         //
+    }
+
+    /**
+     * Handle calls to missing methods on the controller.
+     *
+     * @param  string  $method
+     * @param  array   $parameters
+     * @return mixed
+     *
+     * @throws \BadMethodCallException
+     */
+    public function __call($method, $parameters = []){
+        return $this->responseError("Unknown method");
     }
 }

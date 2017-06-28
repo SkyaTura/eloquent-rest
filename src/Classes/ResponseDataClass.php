@@ -33,7 +33,7 @@ class ResponseDataClass
     {
         $recursiveIndex = $recursiveIndex ? $recursiveIndex : 0;
         $dataObj = [
-            'type' => class_basename($object),
+            'type' => (!empty($object->typeAlias)) ? $object->typeAlias : $object->getTable(),
             'id' => ($object->id) ? $object->id : null,
         ];
         $attributes = $object->getAttributes();

@@ -29,7 +29,7 @@ trait DefaultActionsTrait
     {
         $obj = $this->model();
         $filtered = $this->filter($obj, $request);
-        return $this->response($filtered->get());
+        return $this->response($filtered->get()->first());
     }
 
     /**

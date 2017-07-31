@@ -8,9 +8,9 @@ use Illuminate\Routing\Controller;
 
 class ResponseDataClass
 {
-    protected $meta;
-    protected $data;
-    protected $errors;
+    public $meta;
+    public $data;
+    public $errors;
 
     public function __construct($object, $showRelations = null, $recursiveIndex = null)
     {
@@ -48,7 +48,7 @@ class ResponseDataClass
             $dataObj['attributes'] = $attributes;
         }
 
-        if ($showRelations && method_exists($object, 'getRelationships')) {
+        if ($showRelations && is_callable($object, 'getRelationships')) {
             $defaultRelationParam = [
                 'maxSublevel' => 1,
             ];
@@ -62,7 +62,7 @@ class ResponseDataClass
                         if(in_array($type,['to-one','belongsTo','toOne'])){
                             $relCollection = $relCollection->first();
                         }
-                        $relData = new ResponseDataClass($relCollection, $recursiveIndex + 1);
+                        $relData = new ResponseDataClass($relCollection, true, $recursiveIndex + 1);
                         $relData = $relData->toArray(true);
                         $dataRelations[$rel] = $relData;
                     }

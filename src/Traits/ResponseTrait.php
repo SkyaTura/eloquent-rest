@@ -3,12 +3,14 @@
 namespace SkyaTura\EloquentREST\Traits;
 
 use Illuminate\Http\Request;
+use SkyaTura\EloquentREST\Classes\ResponseDataClass;
 
 trait ResponseTrait
 {
     private function responseAs($obj, $type = 'json', $code = 200)
     {
-        return response()->$type($obj, $code);
+        $response = new ResponseDataClass($obj);
+        return response()->$type($response->toArray(), $code);
     }
 
     public function responseError($msg = 'Unknown error', $code = 500, $type = 'json')
@@ -23,8 +25,6 @@ trait ResponseTrait
 
     public function response($object, $type = 'json')
     {
-        if (!$object) return $this->responseEmpty($type);
-
         return $this->responseAs($object, $type);
     }
 }

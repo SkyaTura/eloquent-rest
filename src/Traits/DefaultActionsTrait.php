@@ -29,7 +29,7 @@ trait DefaultActionsTrait
     {
         $obj = $this->model();
         $filtered = $this->filter($obj, $request);
-        return $this->response($filtered->get());
+        return $this->response($filtered->get()->first());
     }
 
     /**
@@ -42,6 +42,7 @@ trait DefaultActionsTrait
     {
         $model = $this->defaultModel($request->all());
         $model->save();
+        return $this->response($model);
     }
 
     /**
@@ -51,13 +52,13 @@ trait DefaultActionsTrait
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
         $class = $this->defaultModel;
         /**
          * @var $model \Illuminate\Database\Eloquent\Model
          */
-        $model = $class::find($id);
+        $model = $class::find($this->ref);
         $fillable = $model->getFillable();
         $newValues = $request->intersect($fillable);
         $model->fill($newValues);
@@ -70,8 +71,26 @@ trait DefaultActionsTrait
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function delete(Request $request)
     {
-        //
+        $class = $this->defaultModel;
+        /**
+         * @var $model \Illuminate\Database\Eloquent\Model
+         */
+        $model = $class::find($this->ref);
+        $model->delete();
+    }
+
+    /**
+     * Handle calls to missing methods on the controller.
+     *
+     * @param  string  $method
+     * @param  array   $parameters
+     * @return mixed
+     *
+     * @throws \BadMethodCallException
+     */
+    public function __call($method, $parameters = []){
+        return $this->responseError("Unknown method");
     }
 }

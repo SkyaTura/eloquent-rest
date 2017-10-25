@@ -38,6 +38,10 @@ class ResponseDataClass
         ];
         $attributes = $object->getAttributes();
 
+        if (!empty($object->appends)) {
+            $attributes = array_merge($attributes, $object->appends);
+        }
+
         foreach($object->getHidden() as $hide){
             unset($attributes[$hide]);
         }
